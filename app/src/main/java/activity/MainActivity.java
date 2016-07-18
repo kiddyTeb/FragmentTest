@@ -2,8 +2,10 @@ package activity;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.Window;
@@ -22,7 +24,7 @@ import fragment.ThirdFragment;
 /**
  * Created by asus on 2016/7/18.
  */
-public class MainActivity extends FragmentActivity implements View.OnClickListener{
+public class MainActivity extends FragmentActivity {
     private ViewPager mViewPager ;
     private FragmentPagerAdapter mAdapter ;
     private List<Fragment> mFragments = new ArrayList<>();
@@ -34,6 +36,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private ImageView mImageOne ;
     private ImageView mImageTWO ;
     private ImageView mImageThree ;
+
+    private FragmentManager mFragmentManager ;
+    private FirstFragment mFirstFragment ;
+    private SecondFragment mSecondFragment ;
+    private ThirdFragment mThirdFragment ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +62,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         };
         mViewPager.setAdapter(mAdapter);
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            private int currentIndex;
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -75,7 +81,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                         mImageThree.setImageResource(R.mipmap.ysetting);
                         break;
                 }
-                currentIndex = position ;
             }
 
             @Override
@@ -97,27 +102,85 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         mTabThird = (LinearLayout) findViewById(R.id.tab_bottom_three);
 
         mImageOne = (ImageView) findViewById(R.id.bottom_image_one);
+        mImageOne.setImageResource(R.mipmap.ynews);
         mImageTWO = (ImageView) findViewById(R.id.bottom_image_two);
         mImageThree = (ImageView) findViewById(R.id.bottom_image_three);
 
-        mTabFirst.setOnClickListener(this);
+        mFragmentManager = getSupportFragmentManager();
+
+        /*mTabFirst.setOnClickListener(this);
         mTabSecond.setOnClickListener(this);
-        mTabThird.setOnClickListener(this);
+        mTabThird.setOnClickListener(this);*/
 
-        FirstFragment firstFragment = new FirstFragment();
-        SecondFragment secondFragment = new SecondFragment();
-        ThirdFragment thirdFragment = new ThirdFragment();
+        mFirstFragment = new FirstFragment();
+        mSecondFragment = new SecondFragment();
+        mThirdFragment = new ThirdFragment();
 
-        mFragments.add(firstFragment);
-        mFragments.add(secondFragment);
-        mFragments.add(thirdFragment);
+        mFragments.add(mFirstFragment);
+        mFragments.add(mSecondFragment);
+        mFragments.add(mThirdFragment);
     }
 
-    @Override
+   /* @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.tab_bottom_one :
-                
+                change(0);
+                break;
+            case R.id.tab_bottom_two :
+                change(1);
+                break;
+            case R.id.tab_bottom_three :
+                change(2);
+                break;
         }
     }
+
+    /*public void change(int position){
+        restore();
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+        hideFragment(fragmentTransaction);
+        switch (position){
+            case 0:
+                mImageOne.setImageResource(R.mipmap.ynews);
+                if (mFirstFragment == null){
+                    mFirstFragment = new FirstFragment();
+                    fragmentTransaction.add(R.id.viewpager ,mFirstFragment);
+                }else {
+                    fragmentTransaction.show(mFirstFragment);
+                }
+                break;
+            case 1:
+                mImageTWO.setImageResource(R.mipmap.ypeople);
+                if (mSecondFragment == null){
+                    mSecondFragment = new SecondFragment();
+                    fragmentTransaction.add(R.id.viewpager , mSecondFragment);
+                }else {
+                    fragmentTransaction.show(mSecondFragment);
+                }
+                break;
+            case 2 :
+                mImageThree.setImageResource(R.mipmap.ysetting);
+                if (mThirdFragment == null){
+                    mThirdFragment = new ThirdFragment();
+                    fragmentTransaction.add(R.id.viewpager ,mThirdFragment);
+                }else {
+                    fragmentTransaction.show(mThirdFragment);
+                }
+                break;
+        }
+        fragmentTransaction.commit();
+    }
+
+    /*public void hideFragment(FragmentTransaction fragmentTransaction){
+        if (mFirstFragment != null){
+            fragmentTransaction.hide(mFirstFragment);
+        }
+        if (mSecondFragment != null){
+            fragmentTransaction.hide(mSecondFragment);
+        }
+        if (mThirdFragment != null){
+            fragmentTransaction.hide(mThirdFragment);
+        }
+    }*/
 }
