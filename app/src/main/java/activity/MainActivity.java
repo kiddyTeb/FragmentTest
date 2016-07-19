@@ -7,10 +7,15 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.liangdekai.fragmenttest.R;
 
@@ -24,7 +29,7 @@ import fragment.ThirdFragment;
 /**
  * Created by asus on 2016/7/18.
  */
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity{
     private ViewPager mViewPager ;
     private FragmentPagerAdapter mAdapter ;
     private List<Fragment> mFragments = new ArrayList<>();
@@ -37,16 +42,18 @@ public class MainActivity extends FragmentActivity {
     private ImageView mImageTWO ;
     private ImageView mImageThree ;
 
-    private FragmentManager mFragmentManager ;
     private FirstFragment mFirstFragment ;
     private SecondFragment mSecondFragment ;
     private ThirdFragment mThirdFragment ;
+    private FragmentManager mFragmentManager ;
 
+    private final String[] data = new String[] {"选项一","选项二" ,"选项三" ,"选项四" ,"选项五" , "选项六" };
+    private ArrayAdapter<String> adapter ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.main);
+        setContentView(R.layout.draw_main);
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         initView();
         mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
@@ -106,8 +113,26 @@ public class MainActivity extends FragmentActivity {
         mImageTWO = (ImageView) findViewById(R.id.bottom_image_two);
         mImageThree = (ImageView) findViewById(R.id.bottom_image_three);
 
+        final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.draw);
+        //drawerLayout.addDrawerListener();
         mFragmentManager = getSupportFragmentManager();
-
+        adapter = new ArrayAdapter<String>(this ,android.R.layout.simple_list_item_1 ,data);
+        ListView listView = (ListView) findViewById(R.id.listview);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                restore();
+                switch (i){
+                    case 0 :
+                        Toast.makeText(MainActivity.this ,"click" , Toast.LENGTH_LONG).show();
+                        drawerLayout.closeDrawers();
+                        change(0);
+                        //mImageOne.setImageResource(R.mipmap.ynews);
+                        break;
+                }
+            }
+        });
         /*mTabFirst.setOnClickListener(this);
         mTabSecond.setOnClickListener(this);
         mTabThird.setOnClickListener(this);*/
@@ -120,6 +145,8 @@ public class MainActivity extends FragmentActivity {
         mFragments.add(mSecondFragment);
         mFragments.add(mThirdFragment);
     }
+
+
 
    /* @Override
     public void onClick(View view) {
@@ -134,20 +161,23 @@ public class MainActivity extends FragmentActivity {
                 change(2);
                 break;
         }
-    }
+    }*/
 
-    /*public void change(int position){
-        restore();
+    public void change(int position){
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-        hideFragment(fragmentTransaction);
+        //hideFragment(fragmentTransaction);
         switch (position){
             case 0:
                 mImageOne.setImageResource(R.mipmap.ynews);
                 if (mFirstFragment == null){
                     mFirstFragment = new FirstFragment();
-                    fragmentTransaction.add(R.id.viewpager ,mFirstFragment);
+                    mFragments.add(mFirstFragment);
                 }else {
+                    /*//fragmentTransaction.show(mFirstFragment);
+                    fragmentTransaction.replace(R.id.viewpager , mFirstFragment);
                     fragmentTransaction.show(mFirstFragment);
+                    fragmentTransaction.addToBackStack(null);*/
+                    mViewPager.setCurrentItem(0);
                 }
                 break;
             case 1:
@@ -156,7 +186,7 @@ public class MainActivity extends FragmentActivity {
                     mSecondFragment = new SecondFragment();
                     fragmentTransaction.add(R.id.viewpager , mSecondFragment);
                 }else {
-                    fragmentTransaction.show(mSecondFragment);
+                    mViewPager.setCurrentItem(1);
                 }
                 break;
             case 2 :
