@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -52,9 +53,9 @@ public class MainActivity extends FragmentActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.draw_main);
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        Log.d("test","onCreateActivity");
         initView();
         mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
@@ -98,7 +99,7 @@ public class MainActivity extends FragmentActivity{
     }
 
     public void restore(){
-        mImageOne.setImageDrawable(getResources().getDrawable(R.mipmap.news));
+        mImageOne.setImageResource(R.mipmap.news);
         mImageTWO.setImageResource(R.mipmap.people);
         mImageThree.setImageResource(R.mipmap.setting);
     }
@@ -114,9 +115,8 @@ public class MainActivity extends FragmentActivity{
         mImageThree = (ImageView) findViewById(R.id.bottom_image_three);
 
         final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.draw);
-        //drawerLayout.addDrawerListener();
         mFragmentManager = getSupportFragmentManager();
-        adapter = new ArrayAdapter<String>(this ,android.R.layout.simple_list_item_1 ,data);
+        adapter = new ArrayAdapter<>(this ,android.R.layout.simple_list_item_1 ,data);
         ListView listView = (ListView) findViewById(R.id.listview);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
