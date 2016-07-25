@@ -11,7 +11,10 @@ import android.widget.ImageView;
 
 import com.liangdekai.fragmenttest.R;
 
+import java.io.IOException;
+
 import util.BitmapTest;
+import util.LoadImage;
 
 /**
  * Created by asus on 2016/7/25.
@@ -40,9 +43,21 @@ public class TestActivity extends Activity implements View.OnClickListener{
         switch (view.getId()){
             case R.id.main_load :
                 //mIvImage.setImageBitmap(BitmapTest.decodeBitmap(getResources() , R.drawable.first , 100 , 100));
-                Bitmap bitmap = BitmapTest.decodeBitmap(getResources() , R.drawable.first , 100 , 100);
-                Log.d("test" , bitmap.getByteCount()/1024+"kb-bitmap");
-                mIvImage.setImageBitmap(bitmap);
+                //Bitmap bitmap = BitmapTest.decodeBitmap(getResources() , R.drawable.first , 100 , 100);
+                Bitmap bitmap = null;
+                LoadImage.loadImage("http://img5.duitang.com/uploads/item/201507/14/20150714175013_UZ8VF.jpeg", new LoadImage.Listener() {
+                    @Override
+                    public void succed(final Bitmap bitmap) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mIvImage.setImageBitmap(bitmap);
+                            }
+                        });
+                    }
+                });
+                //Log.d("test" , bitmap.getByteCount()/1024+"kb-bitmap");
+
                 break;
         }
     }
