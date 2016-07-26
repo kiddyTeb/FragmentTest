@@ -11,7 +11,7 @@
         android:theme="@android:style/Theme.NoTitleBar">
 
 
-        <activity android:name="activity.TestActivity">
+        <activity android:name="activity.ThreadActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
