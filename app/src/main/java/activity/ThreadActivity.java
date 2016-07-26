@@ -3,6 +3,7 @@ package activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ public class ThreadActivity extends Activity {
     private static final int MESSAGE_UI_HANDLER = 0X11;
     private static final int MESSAGE_THREAD_HANDLER = 0X12;
     private TextView mTvThread ;
+    private HandlerThread handlerThread;
     private Handler mUiHandler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(Message msg) {
@@ -33,10 +35,25 @@ public class ThreadActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.thread);
         mTvThread = (TextView) findViewById(R.id.thread_test);
-        new ThreadLoop().start();
+        //new ThreadLoop().start();
+        handlerThread = new HandlerThread("handlerThread");
+        handlerThread.start();
+        Handler threadHandler= new Handler(handlerThread.getLooper()){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                switch (msg.what){
+                    case MESSAGE_THREAD_HANDLER :
+                        mUiHandler.sendEmptyMessageDelayed(MESSAGE_UI_HANDLER , 5000);
+                        break;
+                }
+            }
+        };
+        //mUiHandler.sendEmptyMessageDelayed(MESSAGE_UI_HANDLER , 3000);
+        threadHandler.sendEmptyMessageDelayed(MESSAGE_THREAD_HANDLER , 10000);
     }
 
-    class ThreadLoop extends Thread{
+    /*class ThreadLoop extends Thread{
         @Override
         public void run() {
             super.run();
@@ -55,10 +72,11 @@ public class ThreadActivity extends Activity {
             handler.sendEmptyMessageDelayed(MESSAGE_THREAD_HANDLER , 5000);
             Looper.loop();
         }
-    }
+    }*/
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        handlerThread.quit();
     }
 }
