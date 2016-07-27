@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.liangdekai.fragmenttest.R;
@@ -35,8 +36,11 @@ public class ThreadActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.thread);
         mTvThread = (TextView) findViewById(R.id.thread_test);
+        Handler handler = new Handler();
+        handler.post(new MyRunnable());
+        //mUiHandler.sendEmptyMessageDelayed(MESSAGE_UI_HANDLER , 5000);
         //new ThreadLoop().start();
-        handlerThread = new HandlerThread("handlerThread");
+       /* handlerThread = new HandlerThread("handlerThread");
         handlerThread.start();
         Handler threadHandler= new Handler(handlerThread.getLooper()){
             @Override
@@ -50,7 +54,27 @@ public class ThreadActivity extends Activity {
             }
         };
         //mUiHandler.sendEmptyMessageDelayed(MESSAGE_UI_HANDLER , 3000);
-        threadHandler.sendEmptyMessageDelayed(MESSAGE_THREAD_HANDLER , 10000);
+        threadHandler.sendEmptyMessageDelayed(MESSAGE_THREAD_HANDLER , 10000);*/
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //handlerThread.quit();
+    }
+
+    private class MyRunnable implements Runnable {
+        public void run() {
+
+            try {
+                Thread.sleep(5000);// 模拟耗时操作
+                mTvThread.setText("更新成功");
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Log.d("test" , ""+Thread.currentThread().getName());
+        }
     }
 
     /*class ThreadLoop extends Thread{
@@ -73,10 +97,4 @@ public class ThreadActivity extends Activity {
             Looper.loop();
         }
     }*/
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        handlerThread.quit();
-    }
 }
