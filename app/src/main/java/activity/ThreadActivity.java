@@ -35,9 +35,10 @@ public class ThreadActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.thread);
-        mTvThread = (TextView) findViewById(R.id.thread_test);
-        Handler handler = new Handler();
-        handler.post(new MyRunnable());
+        //mTvThread = (TextView) findViewById(R.id.thread_test);
+        Log.d("test" , Thread.activeCount()+"");
+        //Handler handler = new Handler();
+        //handler.post(new MyRunnable());
         //mUiHandler.sendEmptyMessageDelayed(MESSAGE_UI_HANDLER , 5000);
         //new ThreadLoop().start();
        /* handlerThread = new HandlerThread("handlerThread");

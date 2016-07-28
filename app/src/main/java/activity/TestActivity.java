@@ -27,9 +27,10 @@ public class TestActivity extends Activity implements View.OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bitmap);
-        int max = (int) (Runtime.getRuntime().maxMemory()/1024/1024);
-        Log.d("test" , max+"kb");
-        init();
+        //int max = (int) (Runtime.getRuntime().maxMemory()/1024/1024);
+        //Log.d("test" , max+"kb");
+        //init();
+        Log.d("test" , Thread.activeCount()+"");
     }
 
     private void init(){
