@@ -15,6 +15,7 @@ import java.io.IOException;
 
 import util.BitmapTest;
 import util.LoadImage;
+import util.ScanFile;
 
 /**
  * Created by asus on 2016/7/25.
@@ -30,7 +31,17 @@ public class TestActivity extends Activity implements View.OnClickListener{
         //int max = (int) (Runtime.getRuntime().maxMemory()/1024/1024);
         //Log.d("test" , max+"kb");
         //init();
-        Log.d("test" , Thread.activeCount()+"");
+        ScanFile.scanImageFile(this, new ScanFile.ScanListener() {
+            @Override
+            public void succeed() {
+                Log.d("test" , "succeed");
+            }
+
+            @Override
+            public void failed() {
+
+            }
+        });
     }
 
     private void init(){
